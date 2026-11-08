@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "focusforge"
+version = "0.1.0"
+description = "A desktop Pomodoro timer with a virtual farm."
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+build = [
+    "pyinstaller>=6.0"
+]
