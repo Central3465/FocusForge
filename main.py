@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from tkinter import messagebox
 import json
 import os
@@ -7,7 +8,7 @@ class focusforge:
     def __init__(a, b):
         a.b = b
         a.b.title("FocusForge")
-        a.b.geometry("450x500")
+        a.b.geometry("450x600")
         a.b.resizable(False, False)
         a.focustime = 25 * 60
         a.breaktime = 5 * 60
@@ -49,6 +50,9 @@ class focusforge:
 
         a.progresslabel = tk.Label(a.b, text="Focus time: 0 / 60 minutes", font=("Arial", 11))
         a.progresslabel.pack(pady=5)
+
+        a.progressbar = ttk.Progressbar(a.b, length=300, maximum=3600, mode="determinate")
+        a.progressbar.pack(pady=10)
 
     def starttimer(a):
         if not a.running:
@@ -131,6 +135,8 @@ class focusforge:
         a.waterlabel.config(text=f"Water: {waters}")
 
         a.progresslabel.config(text=f"Focus time: {mins} / 60 minutes")
+
+        a.progressbar["value"] = a.totalsecs % 3600
 
     def loaddata(a):
         if os.path.exists(a.datafile):
