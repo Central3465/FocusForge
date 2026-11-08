@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 import json
 import os
+from datetime import date, timedelta
 
 class focusforge:
     def __init__(a, b):
@@ -19,6 +20,9 @@ class focusforge:
         a.totalsecs = 0
         a.completedsessions = 0
         a.datafile = "data.json"
+        a.dailyfocus = 0
+        a.lastwatered = None # thanks hackclub terra for giving me inspiration
+        a.today = date.today().isoformat()
         a.loaddata()
         a.create_widgets()
         a.update_display()
@@ -54,6 +58,15 @@ class focusforge:
         a.progressbar = ttk.Progressbar(a.b, length=300, maximum=3600, mode="determinate")
         a.progressbar.pack(pady=10)
 
+        a.farmlabel = tk.Label(a.b, text="your farm", font=("Arial", 20, "bold"))
+        a.farmlabel.pack(pady=15)
+
+        a.croplabel = tk.Label(a.b, text="your crop needs water!", font=("Arial", 14))
+        a.croplabel.pack(pady=5)
+
+        a.waterbtn = tk.Button(a.b, text="Water Farm", font=("Arial", 12), width=15, command=a.waterfarm)
+        a.waterfarm.pack(pady=10)
+
     def starttimer(a):
         if not a.running:
             a.running = True
@@ -80,11 +93,14 @@ class focusforge:
         if not a.running:
             return
 
+        a.checkday()
+
         if a.remainingtime > 0:
             a.remainingtime -= 1
 
             if a.isfocus:
                 a.totalsecs +=1
+                a.dailyfocus += 1
                 a.savedata()
                 a.update_progress()
 
@@ -158,6 +174,29 @@ class focusforge:
 
         with open(a.datafile, "w") as f:
             json.dump(data, f, indent=4)
+
+    def checkday(a):
+        currentday = date.today().isoformat()
+
+        if currentday != a.today:
+            a.today = currentday
+            a.dailyfocus = 0
+            a.savedata()
+
+    def waterfarm(a):
+        if a.dailyfocus < 3600:
+            messagebox.showinfo("not ready!", "you need 60 minutes of focus time to water your crops")
+            return
+
+        if a.lastwatered == a.today:
+            messagebox.showinfo("already watered!", "you've already watered your crops today, take a break!")
+            return
+
+        a.lastwatered = a.today
+        a.savedata()
+        a.updatefarm()
+
+        messagebox.showinfo("Farm watered!", "your crops are now watered, great work!")
 
 if __name__ == "__main__":
     root = tk.Tk()
