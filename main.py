@@ -181,7 +181,7 @@ class focusforge:
                 a.dailyfocus = max(0, int(data.get("daily_focus_seconds", 0)))
                 a.lastwatered = data.get("last_watered")
                 a.today = data.get("today", date.today().isoformat())
-                a.streak = max(0, int(data.get("streak", 0)))
+                a.waterstreak = max(0, int(data.get("streak", 0)))
             except (json.JSONDecodeError, ValueError, TypeError, OSError):
                 print("error loading data")
         else:
