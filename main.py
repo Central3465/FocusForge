@@ -83,6 +83,9 @@ class focusforge:
         a.sessioncountlabel = tk.Label(a.scrollframe, text="Completed session: 0", font=("Arial", 12))
         a.sessioncountlabel.pack(pady=(20, 5), fill="x", padx=40)
 
+        a.croplabel = tk.Label(a.scrollframe, text="Seedling -- Your crops need water!", font=("Arial", 12))
+        a.croplabel.pack(pady=5)
+
         a.waterlabel = tk.Label(a.scrollframe, text="Water: 0 / 1", font=("Arial", 14, "bold"))
         a.waterlabel.pack(pady=5, fill="x", padx=40)
 
@@ -92,17 +95,29 @@ class focusforge:
         a.progressbar = ttk.Progressbar(a.scrollframe, maximum=3600, mode="determinate")
         a.progressbar.pack(pady=10, fill="x", padx=40)
 
-        a.farmlabel = tk.Label(a.scrollframe, text="Your farm", font=("Arial", 20, "bold"))
-        a.farmlabel.pack(pady=15, fill="x", padx=40)
+        a.farmlabel = tk.Label(a.scrollframe, text="Your Farm", font=("Arial", 20, "bold"))
+        a.farmlabel.pack(pady=15)
 
-        a.croplabel = tk.Label(a.scrollframe, text="Your crop needs water!", font=("Arial", 14))
-        a.croplabel.pack(pady=5, fill="x", padx=40)
+        a.farmframe = tk.Frame(a.scrollframe, padx=15, pady=15)
+        a.farmframe.pack(pady=10)
 
-        a.streaklabel = tk.Label(a.scrollframe, text="Watering streak: 0 days", font=("Arial", 12, "bold"))
-        a.streaklabel.pack(pady=5, fill="x", padx=40)
+        a.plots = []
+        for i in range(4):
+            plot = tk.Frame(a.farmframe, width=140, height=110, bg="brown", borderwidth=3)
 
-        a.waterbtn = tk.Button(a.scrollframe, text="Water Crop", font=("Arial", 12), command=a.waterfarm)
-        a.waterbtn.pack(pady=10, fill="x", padx=40)
+            plot.grid(row=i//2, column=i%2, padx=10, pady=10)
+            plot.pack_propagate(False)
+            crop = tk.Label(plot, text="🌻", font=("Arial", 30))
+            crop.bind("<Button-1>", lambda e, index=i: a.plotclick(index))
+            crop.pack(expand=True)
+
+            a.plots.append(crop)
+
+        a.streaklabel = tk.Label(a.scrollframe, text="Watering streak: 0 days", font=("Arial", 12))
+        a.streaklabel.pack(pady=5)
+
+        a.waterbtn = tk.Button(a.scrollframe, text="Water your farm", font=("Arial", 12), command=a.waterfarm)
+        a.waterbtn.pack(pady=10)
 
         a.musiclabel = tk.Label(a.scrollframe, text="Focus Music", font=("Arial", 20, "bold"))
         a.musiclabel.pack(pady=15, fill="x", padx=40)
@@ -112,6 +127,21 @@ class focusforge:
 
         a.spotifybtn = tk.Button(a.scrollframe, text="Open Spotify", font=("Arial", 12), command=a.openspotify)
         a.spotifybtn.pack(pady=10, fill="x", padx=40)
+
+    # make plots interactive
+    def plotclick(a, index):
+        messagebox.showinfo("Plot", f"You clicked on plot {index+1}!")
+
+    def updateplots(a):
+        if a.waterstreak >= 7:
+            icon = "🌳"
+        elif a.waterstreak >= 3:
+            icon = "🌱"
+        else:
+            icon = "🌻"
+
+        for plot in a.plots:
+            plot.config(text=icon)
 
     def starttimer(a):
         if not a.running:
@@ -187,6 +217,7 @@ class focusforge:
         a.sessioncountlabel.config(text=f"Completed sessions: {a.completedsessions}")
 
         a.update_progress()
+        a.updateplots()
         a.updatefarm()
 
     def update_progress(a):
@@ -223,6 +254,7 @@ class focusforge:
 
         a.croplabel.config(text=f"{crop} -- {status}")
         a.streaklabel.config(text=f"Watering streak: {a.waterstreak} days")
+        a.updateplots()
 
     def loaddata(a):
         if os.path.exists(a.datafile):
