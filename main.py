@@ -206,6 +206,11 @@ class focusforge:
         currentday = date.today().isoformat()
 
         if currentday != a.today:
+            yesterday = (date.today() - timedelta(days=1)).isoformat()
+
+            if a.lastwatered != yesterday: # missing a day now resets streak
+                a.waterstreak = 0
+
             a.today = currentday
             a.dailyfocus = 0
             a.savedata()
