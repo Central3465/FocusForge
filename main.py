@@ -20,7 +20,7 @@ class focusforge:
         a.create_widgets()
         a.update_display()
         a.datafile = "data.json"
-        a.load_data()
+        a.loaddata()
 
     def create_widgets(a):
         a.heading = tk.Label(a.b, text="FocusForge", font=("Helvetica", 24)) # remember b is window and a is app
@@ -145,12 +145,12 @@ class focusforge:
         else:
             with open(a.datafile, "w") as file:
                 test = { "total_focus_seconds": 0, "completed_sessions": 0}
-                json.dump(test)
+                json.dump(test, file, indent=4)
 
     def savedata(a):
         data = { "total_focus_seconds": a.totalsecs, "completed_sessions": a.completedsessions}
 
-        with open(a.progressfile, "w") as f:
+        with open(a.datafile, "w") as f:
             json.dump(data, f, indent=4)
 
 if __name__ == "__main__":
