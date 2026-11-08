@@ -162,7 +162,7 @@ class focusforge:
         if a.lastwatered == a.today:
             a.croplabel.config(text="Your crop is watered!")
             a.waterbtn.config(state="disabled")
-        elif a.lastwatered is None or a.lastwatered < yesterday:
+        elif a.lastwatered is not None and a.lastwatered < yesterday:
             a.croplabel.config(text="Your crop has withered!")
             a.waterbtn.config(state="disabled")
         else:
