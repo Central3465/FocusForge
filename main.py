@@ -65,7 +65,7 @@ class focusforge:
         a.croplabel = tk.Label(a.b, text="Your crop needs water!", font=("Arial", 14))
         a.croplabel.pack(pady=5)
 
-        a.waterbtn = tk.Button(a.b, text="Water Farm", font=("Arial", 12), width=15, command=a.waterfarm)
+        a.waterbtn = tk.Button(a.b, text="Water Crop", font=("Arial", 12), width=15, command=a.waterfarm)
         a.waterbtn.pack(pady=10)
 
     def starttimer(a):
