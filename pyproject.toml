@@ -1,0 +1,9 @@
+[project]
+name = "FocusForge"
+version = "1.0.0"
+description = "A desktop Pomodoro timer with a virtual farm."
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+build = ["pyinstaller>=6.0"]
