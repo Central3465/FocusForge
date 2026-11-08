@@ -81,6 +81,7 @@ class focusforge:
 
             if a.isfocus:
                 a.totalsecs +=1
+                a.savedata()
                 a.update_progress()
 
             a.update_display()
