@@ -10,6 +10,10 @@ It's early. Nothing is polished. But it runs, and that's okay.
 
 If you clicked here expecting it to be a web app, https://google.com/search?q=timer
 
+## Known issues
+In the interest of honesting, here's what's currently in the code:
+- 
+
 ## Usage
 ```
 python main.py
@@ -17,7 +21,7 @@ python main.py
 That's it. No subcommands and no flags. Closing it is simple, as most desktop applications (I'm sure you can figure out how to close)
 
 ## Installation
-You need Python 3.10+. Be my guest to test whether it works on an older version; I'll be very intrigued at your findings. 
+You need Python 3.10+ with Tkinter (it ships with most Python installs; if yours doesn't have it, that's between you and your package manager). Feel free to test whether it works on an older version; let me know if you got it to work. 
 ```
 git clone https://github.com/Central3465/FocusForge.git
 cd FocusForge
@@ -25,7 +29,7 @@ python main.py
 ```
 
 # Privacy
-Your sessions are (will) be stored in a JSON file on your machine. This app does not make requests to any of my servers. 
+You stats are stored in a JSON file (`data.json`) on your machine. This app makes zero network requests. It does not know your IP address nor your full name, and frankly it couldn't care less. 
 
 # Contributing
 Okay. Submit a PR with your code changes and ensure it is tested (and it works). 

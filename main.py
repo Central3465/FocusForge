@@ -138,7 +138,7 @@ class focusforge:
                 with open(a.datafile, "r") as file:
                     data = json.load(file)
 
-                a.totalsecs = max(0, int(data.get("total_focus_secons", 0)))
+                a.totalsecs = max(0, int(data.get("total_focus_seconds", 0)))
                 a.completedsessions = max(0, int(data.get("completed_sessions", 0)))
             except (json.JSONDecodeError, ValueError, TypeError, OSError):
                 print("error loading data")
