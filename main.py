@@ -4,12 +4,13 @@ from tkinter import messagebox
 import json
 import os
 from datetime import date, timedelta
+import webbrowser
 
 class focusforge:
     def __init__(a, b):
         a.b = b
         a.b.title("FocusForge")
-        a.b.geometry("700x700")
+        a.b.geometry("1000x1000")
         a.b.resizable(False, False)
         a.focustime = 25 * 60
         a.breaktime = 5 * 60
@@ -71,6 +72,15 @@ class focusforge:
 
         a.waterbtn = tk.Button(a.b, text="Water Crop", font=("Arial", 12), width=15, command=a.waterfarm)
         a.waterbtn.pack(pady=10)
+
+        a.musiclabel = tk.Label(a.b, text="Focus Music", font=("Arial", 20, "bold"))
+        a.musiclabel.pack(pady=15)
+
+        a.musicstatus = tk.Label(a.b, text="Ready to focus?", font=("Arial", 11))
+        a.musicstatus.pack(pady=5)
+
+        a.spotifybtn = tk.Button(a.b, text="Open Spotify", font=("Arial", 12), width=20, command=a.openspotify)
+        a.spotifybtn.pack(pady=10)
 
     def starttimer(a):
         if not a.running:
@@ -251,6 +261,16 @@ class focusforge:
 
         messagebox.showinfo("Farm watered!", "your crops are now watered, great work!")
         a.croplabel.config(text=f"{crop} -- watered!")
+
+    def openspotify(a):
+        url = "https://open.spotify.com/playlist/671ZWIQMPSY2IO6Ot7b57V"
+
+        success = webbrowser.open(url)
+
+        if success:
+            a.musicstatus.config(text="Opening Spotify...")
+        else:
+            a.musicstatus.config(text="Failed to open spotify.")
 
 if __name__ == "__main__":
     root = tk.Tk()
