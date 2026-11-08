@@ -59,10 +59,10 @@ class focusforge:
         a.progressbar = ttk.Progressbar(a.b, length=300, maximum=3600, mode="determinate")
         a.progressbar.pack(pady=10)
 
-        a.farmlabel = tk.Label(a.b, text="your farm", font=("Arial", 20, "bold"))
+        a.farmlabel = tk.Label(a.b, text="Your farm", font=("Arial", 20, "bold"))
         a.farmlabel.pack(pady=15)
 
-        a.croplabel = tk.Label(a.b, text="your crop needs water!", font=("Arial", 14))
+        a.croplabel = tk.Label(a.b, text="Your crop needs water!", font=("Arial", 14))
         a.croplabel.pack(pady=5)
 
         a.waterbtn = tk.Button(a.b, text="Water Farm", font=("Arial", 12), width=15, command=a.waterfarm)
@@ -160,13 +160,13 @@ class focusforge:
         yesterday = (date.today() - timedelta(days=1)).isoformat()
 
         if a.lastwatered == a.today:
-            a.croplabel.config(text="your crop is watered!")
+            a.croplabel.config(text="Your crop is watered!")
             a.waterbtn.config(state="disabled")
         elif a.lastwatered is None or a.lastwatered < yesterday:
-            a.croplabel.config(text="your crop has withed!")
+            a.croplabel.config(text="Your crop has withered!")
             a.waterbtn.config(state="disabled")
         else:
-            a.croplabel.config(text="your crop needs water!")
+            a.croplabel.config(text="Your crop needs water!")
             a.waterbtn.config(state="normal")
 
     def loaddata(a):
