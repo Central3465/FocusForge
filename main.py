@@ -83,9 +83,6 @@ class focusforge:
         a.sessioncountlabel = tk.Label(a.scrollframe, text="Completed session: 0", font=("Arial", 12))
         a.sessioncountlabel.pack(pady=(20, 5), fill="x", padx=40)
 
-        a.croplabel = tk.Label(a.scrollframe, text="Seedling -- Your crops need water!", font=("Arial", 12))
-        a.croplabel.pack(pady=5)
-
         a.waterlabel = tk.Label(a.scrollframe, text="Water: 0 / 1", font=("Arial", 14, "bold"))
         a.waterlabel.pack(pady=5, fill="x", padx=40)
 
@@ -252,7 +249,6 @@ class focusforge:
         else:
             crop = "Seedling"
 
-        a.croplabel.config(text=f"{crop} -- {status}")
         a.streaklabel.config(text=f"Watering streak: {a.waterstreak} days")
         a.updateplots()
 
@@ -323,7 +319,6 @@ class focusforge:
             crop = "Seedling"
 
         messagebox.showinfo("Farm watered!", "your crops are now watered, great work!")
-        a.croplabel.config(text=f"{crop} -- watered!")
 
     def openspotify(a):
         url = "https://open.spotify.com/playlist/671ZWIQMPSY2IO6Ot7b57V"
