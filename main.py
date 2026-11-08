@@ -96,6 +96,7 @@ class focusforge:
 
         if a.isfocus:
             a.completedsessions += 1
+            a.savedata()
 
             messagebox.showinfo("Focus complete!", "Great work! Time for a break!")
 
@@ -155,4 +156,12 @@ class focusforge:
 if __name__ == "__main__":
     root = tk.Tk()
     app = focusforge(root)
+
+    # make closing the window not destroy data
+    root.protocol("WM_DELETE_WINDOW", lambda: (
+        app.pausetimer(),
+        app.savedata(), # forgot the commas, need them here
+        root.destroy()
+    ))
+
     root.mainloop()
