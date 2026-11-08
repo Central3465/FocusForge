@@ -1,4 +1,4 @@
-import tkinter as tk
+﻿import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 import json
@@ -28,60 +28,90 @@ class focusforge:
         a.today = date.today().isoformat()
         a.loaddata()
         a.checkday()
+        a.canvas = tk.Canvas(a.b, highlightthickness=0)
+        a.scrollbar = ttk.Scrollbar(a.b, orient="vertical", command=a.canvas.yview)
+        a.scrollframe = tk.Frame(a.canvas)
+        a.window_id = a.canvas.create_window(0, 0, window=a.scrollframe, anchor="nw")
+        a.scrollframe.bind("<Configure>", a.updatescroll)
+        a.canvas.bind("<Configure>", a.updatescroll)
+        a.canvas.configure(yscrollcommand=a.scrollbar.set)
+        a.scrollbar.pack(side="right", fill="y")
+        a.canvas.pack(side="left", fill="both", expand=True)
+        a.b.bind_all("<MouseWheel>", a.onmousewheel)
         a.create_widgets()
         a.update_display()
 
+    def updatescroll(a, event=None):
+        # make the content fill the window: at least as wide and as tall as the canvas
+        cw = a.canvas.winfo_width()
+        ch = a.canvas.winfo_height()
+        needed = a.scrollframe.winfo_reqheight()
+        a.canvas.itemconfigure(a.window_id, width=cw, height=max(needed, ch))
+        a.canvas.configure(scrollregion=(0, 0, cw, max(needed, ch)))
+
+        # only show the scrollbar when content is taller than the window
+        if needed > ch:
+            if not a.scrollbar.winfo_ismapped():
+                a.scrollbar.pack(side="right", fill="y", before=a.canvas)
+        else:
+            a.scrollbar.pack_forget()
+            a.canvas.yview_moveto(0)
+
+    def onmousewheel(a, event):
+        if a.scrollframe.winfo_reqheight() > a.canvas.winfo_height():
+            a.canvas.yview_scroll(int(-event.delta / 120), "units")
+
     def create_widgets(a):
-        a.heading = tk.Label(a.b, text="FocusForge", font=("Helvetica", 24)) # remember b is window and a is app
-        a.heading.pack(pady=20)
+        a.heading = tk.Label(a.scrollframe, text="FocusForge", font=("Helvetica", 24)) # remember b is window and a is app
+        a.heading.pack(pady=20, fill="x", padx=40)
 
-        a.sessionlabel = tk.Label(a.b, text="Focus Time", font=("Arial", 16))
-        a.sessionlabel.pack(pady=5)
+        a.sessionlabel = tk.Label(a.scrollframe, text="Focus Time", font=("Arial", 16))
+        a.sessionlabel.pack(pady=5, fill="x", padx=40)
 
-        a.timerlabel = tk.Label(a.b, text="25:00", font=("Arial", 64, "bold"))
-        a.timerlabel.pack(pady=20)
+        a.timerlabel = tk.Label(a.scrollframe, text="25:00", font=("Arial", 64, "bold"))
+        a.timerlabel.pack(pady=20, fill="x", padx=40)
 
-        a.startbtn = tk.Button(a.b, text="Start", font=("Arial", 12), width=12, command=a.starttimer)
-        a.startbtn.pack(pady=5)
+        a.startbtn = tk.Button(a.scrollframe, text="Start", font=("Arial", 12), command=a.starttimer)
+        a.startbtn.pack(pady=5, fill="x", padx=40)
 
-        a.pausebtn = tk.Button(a.b, text="Pause", font=("Arial", 12), width=12, command=a.pausetimer)
-        a.pausebtn.pack(pady=5)
+        a.pausebtn = tk.Button(a.scrollframe, text="Pause", font=("Arial", 12), command=a.pausetimer)
+        a.pausebtn.pack(pady=5, fill="x", padx=40)
 
-        a.resetbtn = tk.Button(a.b, text="Reset", font=("Arial", 12), width=12, command=a.resettimer)
-        a.resetbtn.pack(pady=5)
+        a.resetbtn = tk.Button(a.scrollframe, text="Reset", font=("Arial", 12), command=a.resettimer)
+        a.resetbtn.pack(pady=5, fill="x", padx=40)
 
-        a.sessioncountlabel = tk.Label(a.b, text="Completed session: 0", font=("Arial", 12))
-        a.sessioncountlabel.pack(pady=(20, 5))
+        a.sessioncountlabel = tk.Label(a.scrollframe, text="Completed session: 0", font=("Arial", 12))
+        a.sessioncountlabel.pack(pady=(20, 5), fill="x", padx=40)
 
-        a.waterlabel = tk.Label(a.b, text="Water: 0 / 1", font=("Arial", 14, "bold"))
-        a.waterlabel.pack(pady=5)
+        a.waterlabel = tk.Label(a.scrollframe, text="Water: 0 / 1", font=("Arial", 14, "bold"))
+        a.waterlabel.pack(pady=5, fill="x", padx=40)
 
-        a.progresslabel = tk.Label(a.b, text="Focus time: 0 / 60 minutes", font=("Arial", 11))
-        a.progresslabel.pack(pady=5)
+        a.progresslabel = tk.Label(a.scrollframe, text="Focus time: 0 / 60 minutes", font=("Arial", 11))
+        a.progresslabel.pack(pady=5, fill="x", padx=40)
 
-        a.progressbar = ttk.Progressbar(a.b, length=300, maximum=3600, mode="determinate")
-        a.progressbar.pack(pady=10)
+        a.progressbar = ttk.Progressbar(a.scrollframe, maximum=3600, mode="determinate")
+        a.progressbar.pack(pady=10, fill="x", padx=40)
 
-        a.farmlabel = tk.Label(a.b, text="Your farm", font=("Arial", 20, "bold"))
-        a.farmlabel.pack(pady=15)
+        a.farmlabel = tk.Label(a.scrollframe, text="Your farm", font=("Arial", 20, "bold"))
+        a.farmlabel.pack(pady=15, fill="x", padx=40)
 
-        a.croplabel = tk.Label(a.b, text="Your crop needs water!", font=("Arial", 14))
-        a.croplabel.pack(pady=5)
+        a.croplabel = tk.Label(a.scrollframe, text="Your crop needs water!", font=("Arial", 14))
+        a.croplabel.pack(pady=5, fill="x", padx=40)
 
-        a.streaklabel = tk.Label(a.b, text="Watering streak: 0 days", font=("Arial", 12, "bold"))
-        a.streaklabel.pack(pady=5)
+        a.streaklabel = tk.Label(a.scrollframe, text="Watering streak: 0 days", font=("Arial", 12, "bold"))
+        a.streaklabel.pack(pady=5, fill="x", padx=40)
 
-        a.waterbtn = tk.Button(a.b, text="Water Crop", font=("Arial", 12), width=15, command=a.waterfarm)
-        a.waterbtn.pack(pady=10)
+        a.waterbtn = tk.Button(a.scrollframe, text="Water Crop", font=("Arial", 12), command=a.waterfarm)
+        a.waterbtn.pack(pady=10, fill="x", padx=40)
 
-        a.musiclabel = tk.Label(a.b, text="Focus Music", font=("Arial", 20, "bold"))
-        a.musiclabel.pack(pady=15)
+        a.musiclabel = tk.Label(a.scrollframe, text="Focus Music", font=("Arial", 20, "bold"))
+        a.musiclabel.pack(pady=15, fill="x", padx=40)
 
-        a.musicstatus = tk.Label(a.b, text="Ready to focus?", font=("Arial", 11))
-        a.musicstatus.pack(pady=5)
+        a.musicstatus = tk.Label(a.scrollframe, text="Ready to focus?", font=("Arial", 11))
+        a.musicstatus.pack(pady=5, fill="x", padx=40)
 
-        a.spotifybtn = tk.Button(a.b, text="Open Spotify", font=("Arial", 12), width=20, command=a.openspotify)
-        a.spotifybtn.pack(pady=10)
+        a.spotifybtn = tk.Button(a.scrollframe, text="Open Spotify", font=("Arial", 12), command=a.openspotify)
+        a.spotifybtn.pack(pady=10, fill="x", padx=40)
 
     def starttimer(a):
         if not a.running:
