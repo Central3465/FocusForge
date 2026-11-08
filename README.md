@@ -6,14 +6,16 @@ This is my Hackclub project. In fact, I did build a similar version to this befo
 It's early. Nothing is polished. But it runs, and that's okay. 
 
 ## What it actually does
-- The timer - you start it, it counts down from 25 minutes, you focus. When it's done, you get a 5 minute break. Logic lives in `main.py`. That's the feature list, so don't give me some unreasonable suggestions such as "cAn YoU pLeAsE aDd ChAtGpT".
+- The timer - you start it, it counts down from 25 minutes, you focus. When it's done, you get a 5 minute break. Logic lives in `main.py`. That's the feature list, and no I'm not adding "cAn YoU pLeAsE aDd ChAtGpT".
 
 If you clicked here expecting it to be a web app, https://google.com/search?q=timer
 
 ## Known issues
 In the interest of honesting, here's what's currently in the code:
-- 
-
+- **Water counter is decorative.** It says "Water: 0 / 1" and does not update. I do plan on making this feature work soon. 
+- **It saves to disk every second** while you're focused larping. Somewhere, an SSD weeps, sorry!
+- **Variable naming.** I do apologise for my variable naming, but just keep in mind that a means self and b means window. I might use the whole alphabet soon.
+- **First-launch grammar.** Before the display updates, the label briefly reads as no data. It's okay. It still works. 
 ## Usage
 ```
 python main.py
