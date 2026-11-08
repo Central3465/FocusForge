@@ -66,6 +66,9 @@ class focusforge:
         a.croplabel = tk.Label(a.b, text="Your crop needs water!", font=("Arial", 14))
         a.croplabel.pack(pady=5)
 
+        a.streaklabel = tk.Label(a.b, text="Watering streak: 0 days", font=("Arial", 12, "bold"))
+        a.streaklabel.pack(pady=5)
+
         a.waterbtn = tk.Button(a.b, text="Water Crop", font=("Arial", 12), width=15, command=a.waterfarm)
         a.waterbtn.pack(pady=10)
 
@@ -161,14 +164,24 @@ class focusforge:
         yesterday = (date.today() - timedelta(days=1)).isoformat()
 
         if a.lastwatered == a.today:
-            a.croplabel.config(text="Your crop is watered!")
+            status = "Your crops are already watered today!"
             a.waterbtn.config(state="disabled")
         elif a.lastwatered is not None and a.lastwatered < yesterday:
-            a.croplabel.config(text="Your crop has withered!")
-            a.waterbtn.config(state="disabled")
-        else:
-            a.croplabel.config(text="Your crop needs water!")
+            status = "Oh no, your crops are withered! You missed a day of watering."
             a.waterbtn.config(state="normal")
+        else:
+            status = "Your crops need water!"
+            a.waterbtn.config(state="normal")
+
+        if a.waterstreak >= 7:
+            crop = "Mature crop"
+        elif a.waterstreak >= 3:
+            crop = "Growing crop"
+        else:
+            crop = "Seedling"
+
+        a.croplabel.config(text=f"{crop} -- {status}")
+        a.streaklabel.config(text=f"Watering streak: {a.waterstreak} days")
 
     def loaddata(a):
         if os.path.exists(a.datafile):
