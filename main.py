@@ -212,11 +212,11 @@ class focusforge:
 
     def waterfarm(a):
         if a.dailyfocus < 3600:
-            messagebox.showinfo("not ready!", "you need 60 minutes of focus time to water your crops")
+            messagebox.showwarning("Not ready!", "You need 1 hour of focus time to water your crops!")
             return
 
         if a.lastwatered == a.today:
-            messagebox.showinfo("already watered!", "you've already watered your crops today, take a break!")
+            messagebox.showwarning("Already watered!", "You've already watered your crops today, take a break!")
             return
 
         a.lastwatered = a.today
