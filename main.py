@@ -22,6 +22,7 @@ class focusforge:
         a.datafile = "data.json"
         a.dailyfocus = 0
         a.lastwatered = None # thanks hackclub terra for giving me inspiration
+        a.waterstreak = 0
         a.today = date.today().isoformat()
         a.loaddata()
         a.checkday()
@@ -180,6 +181,7 @@ class focusforge:
                 a.dailyfocus = max(0, int(data.get("daily_focus_seconds", 0)))
                 a.lastwatered = data.get("last_watered")
                 a.today = data.get("today", date.today().isoformat())
+                a.streak = max(0, int(data.get("streak", 0)))
             except (json.JSONDecodeError, ValueError, TypeError, OSError):
                 print("error loading data")
         else:
@@ -193,7 +195,8 @@ class focusforge:
             "completed_sessions": a.completedsessions, 
             "daily_focus_seconds": a.dailyfocus, 
             "last_watered": a.lastwatered, 
-            "today": a.today
+            "today": a.today,
+            "streak": a.waterstreak
         }
 
         with open(a.datafile, "w") as f:
@@ -217,10 +220,19 @@ class focusforge:
             return
 
         a.lastwatered = a.today
+        a.waterstreak += 1
         a.savedata()
         a.updatefarm()
+        crop = "Seedling"
+        if a.waterstreak >= 7:
+            crop = "Mature crop"
+        elif a.waterstreak >= 3:
+            crop = "Growing crop"
+        else:
+            crop = "Seedling"
 
         messagebox.showinfo("Farm watered!", "your crops are now watered, great work!")
+        a.croplabel.config(text=f"{crop} -- watered!")
 
 if __name__ == "__main__":
     root = tk.Tk()
