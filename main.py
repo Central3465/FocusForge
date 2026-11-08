@@ -9,7 +9,7 @@ class focusforge:
     def __init__(a, b):
         a.b = b
         a.b.title("FocusForge")
-        a.b.geometry("450x600")
+        a.b.geometry("700x700")
         a.b.resizable(False, False)
         a.focustime = 25 * 60
         a.breaktime = 5 * 60
@@ -24,6 +24,7 @@ class focusforge:
         a.lastwatered = None # thanks hackclub terra for giving me inspiration
         a.today = date.today().isoformat()
         a.loaddata()
+        a.checkday()
         a.create_widgets()
         a.update_display()
 
@@ -65,7 +66,7 @@ class focusforge:
         a.croplabel.pack(pady=5)
 
         a.waterbtn = tk.Button(a.b, text="Water Farm", font=("Arial", 12), width=15, command=a.waterfarm)
-        a.waterfarm.pack(pady=10)
+        a.waterbtn.pack(pady=10)
 
     def starttimer(a):
         if not a.running:
@@ -141,6 +142,7 @@ class focusforge:
         a.sessioncountlabel.config(text=f"Completed sessions: {a.completedsessions}")
 
         a.update_progress()
+        a.updatefarm()
 
     def update_progress(a):
         waters = a.totalsecs // 3600
@@ -154,6 +156,19 @@ class focusforge:
 
         a.progressbar["value"] = a.totalsecs % 3600
 
+    def updatefarm(a):
+        yesterday = (date.today() - timedelta(days=1)).isoformat()
+
+        if a.lastwatered == a.today:
+            a.croplabel.config(text="your crop is watered!")
+            a.waterbtn.config(state="disabled")
+        elif a.lastwatered is None or a.lastwatered < yesterday:
+            a.croplabel.config(text="your crop has withed!")
+            a.waterbtn.config(state="disabled")
+        else:
+            a.croplabel.config(text="your crop needs water!")
+            a.waterbtn.config(state="normal")
+
     def loaddata(a):
         if os.path.exists(a.datafile):
             try:
@@ -162,6 +177,9 @@ class focusforge:
 
                 a.totalsecs = max(0, int(data.get("total_focus_seconds", 0)))
                 a.completedsessions = max(0, int(data.get("completed_sessions", 0)))
+                a.dailyfocus = max(0, int(data.get("daily_focus_seconds", 0)))
+                a.lastwatered = data.get("last_watered")
+                a.today = data.get("today", date.today().isoformat())
             except (json.JSONDecodeError, ValueError, TypeError, OSError):
                 print("error loading data")
         else:
@@ -170,7 +188,13 @@ class focusforge:
                 json.dump(test, file, indent=4)
 
     def savedata(a):
-        data = { "total_focus_seconds": a.totalsecs, "completed_sessions": a.completedsessions}
+        data = { 
+            "total_focus_seconds": a.totalsecs, 
+            "completed_sessions": a.completedsessions, 
+            "daily_focus_seconds": a.dailyfocus, 
+            "last_watered": a.lastwatered, 
+            "today": a.today
+        }
 
         with open(a.datafile, "w") as f:
             json.dump(data, f, indent=4)
