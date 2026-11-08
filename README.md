@@ -15,7 +15,6 @@ In the interest of honesting, here's what's currently in the code:
 - **Water counter is decorative.** It says "Water: 0 / 1" and does not update. I do plan on making this feature work soon. 
 - **It saves to disk every second** while you're focused larping. Somewhere, an SSD weeps, sorry!
 - **Variable naming.** I do apologise for my variable naming, but just keep in mind that a means self and b means window. I might use the whole alphabet soon.
-- **First-launch grammar.** Before the display updates, the label briefly reads as no data. It's okay. It still works. 
 ## Usage
 ```
 python main.py

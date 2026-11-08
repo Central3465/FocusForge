@@ -17,10 +17,10 @@ class focusforge:
         a.timerid = None
         a.totalsecs = 0
         a.completedsessions = 0
-        a.create_widgets()
-        a.update_display()
         a.datafile = "data.json"
         a.loaddata()
+        a.create_widgets()
+        a.update_display()
 
     def create_widgets(a):
         a.heading = tk.Label(a.b, text="FocusForge", font=("Helvetica", 24)) # remember b is window and a is app
