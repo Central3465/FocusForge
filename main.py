@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
+import json
+import os
 
 class focusforge:
     def __init__(a, b):
@@ -17,6 +19,8 @@ class focusforge:
         a.completedsessions = 0
         a.create_widgets()
         a.update_display()
+        a.datafile = "data.json"
+        a.load_data()
 
     def create_widgets(a):
         a.heading = tk.Label(a.b, text="FocusForge", font=("Helvetica", 24)) # remember b is window and a is app
@@ -125,6 +129,27 @@ class focusforge:
         a.waterlabel.config(text=f"Water: {waters}")
 
         a.progresslabel.config(text=f"Focus time: {mins} / 60 minutes")
+
+    def loaddata(a):
+        if os.path.exists(a.datafile):
+            try:
+                with open(a.datafile, "r") as file:
+                    data = json.load(file)
+
+                a.totalsecs = max(0, int(data.get("total_focus_secons", 0)))
+                a.completedsessions = max(0, int(data.get("completed_sessions", 0)))
+            except (json.JSONDecodeError, ValueError, TypeError, OSError):
+                print("error loading data")
+        else:
+            with open(a.datafile, "w") as file:
+                test = { "total_focus_seconds": 0, "completed_sessions": 0}
+                json.dump(test)
+
+    def savedata(a):
+        data = { "total_focus_seconds": a.totalsecs, "completed_sessions": a.completedsessions}
+
+        with open(a.progressfile, "w") as f:
+            json.dump(data, f, indent=4)
 
 if __name__ == "__main__":
     root = tk.Tk()
