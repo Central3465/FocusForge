@@ -10,8 +10,9 @@ class focusforge:
     def __init__(a, b):
         a.b = b
         a.b.title("FocusForge")
-        a.b.geometry("1000x1000")
-        a.b.resizable(False, False)
+        a.b.geometry("700x700")
+        a.b.minsize(500, 500)
+        a.b.resizable(True, True)
         a.focustime = 25 * 60
         a.breaktime = 5 * 60
         a.remainingtime = a.focustime
